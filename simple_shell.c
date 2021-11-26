@@ -11,6 +11,7 @@ int simple_shell(void)
 	char **argv;
 	struct stat st;
 
+
 	buffer = malloc(bufsize * sizeof(char));
 	if (buffer == NULL)
 	{
