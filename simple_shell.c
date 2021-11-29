@@ -43,8 +43,10 @@ int simple_shell(void)
 			free(buffer);
 			exit(0);
 		}
-
-		buffer[strlen(buffer) - 1] = '\0';
+		if (buffer[strlen(buffer) - 1] == '\0')
+		{
+			buffer[strlen(buffer) - 1] = '\0';
+		}
 		argv = splitter(buffer);
 
 		if (strcmp(argv[0], "exit") == 0)
