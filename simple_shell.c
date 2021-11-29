@@ -1,5 +1,4 @@
 #include "shell.h"
-
 char **splitter(char fun[])
 {
 	char **holder;
@@ -31,11 +30,12 @@ int simple_shell(void)
 	char **argv;
 	struct stat st;
 	char *pwd = getcwd(pwd, bufsize);
-	
+	int cd;
+
 	if (buffer == NULL)
 		return (-1);
 	do {
-		printf("#%s cisnotfun$ ", pwd);
+		printf("#%s cisfun$ ", pwd);
 		length = getline(&buffer, &bufsize, stdin);
 		if (length == EOF)
 		{
@@ -44,16 +44,23 @@ int simple_shell(void)
 			exit(0);
 		}
 
-		if (strcmp(buffer, "exit\n") == 0)
-		{
-			free(buffer);
-			exit(0);
-		}
 		buffer[strlen(buffer) - 1] = '\0';
 		argv = splitter(buffer);
+
+		if (strcmp(argv[0], "exit") == 0)
+		{
+			quit(argv)
+			free(buffer);
+			exit(0);
+
+		}
 		if (_strcmp(argv[0], "cd") == 0)
-		{	
-			chdir(argv[1]);
+		{
+			cd = chdir(argv[1]);
+			if (cd != 0)
+			{
+				printf("./hsh: cd: %s: No such file or directory\n", argv[1]);
+			}
 			pwd = getcwd(pwd, bufsize);
 			continue;
 		}
@@ -69,7 +76,7 @@ int simple_shell(void)
 		}
 		else
 		{
-		printf("%s: not found\n", argv[0]);
+			printf("%s: 1: %s: not found\n", "./hsh", argv[0]);
 		}
 
 	} while (length != -1);
@@ -96,7 +103,28 @@ int execArgs(char **argv)
 	if (pid == 0)
 	{
 		execve(argv[0], argv, NULL);
-	}	
+	}
 
 return (0);
+}
+
+void quit(char **argv)
+{
+	printf("exit\n");
+	if (!argv[1])
+	{
+		break;
+	}
+	else
+	{
+		if (argv[1][0] >= '0' && argv[1][0] <= '9')
+		{
+			break;
+		}
+		else
+		{
+			printf("./hsh: exit: ");
+			printf("%s: numeric argument required\n", argv[1]);
+		}
+	}
 }
