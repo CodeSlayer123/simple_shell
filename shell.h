@@ -35,5 +35,6 @@ void pr_uints(unsigned int c);
 char *_itoa(int n, char *str, int base);
 void reverse(char str[], int length);
 int print_min(void);
-
+int _isdigit(int c);
+void quit(char **argv);
 #endif
