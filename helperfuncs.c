@@ -1,5 +1,29 @@
 #include "shell.h"
 /**
+ * _getPath - gets path
+ * Return: splitpath
+ */
+char **_getPath(void)
+{
+	char *pathtok;
+	char *path;
+	int i;
+	char **splitpath;
+
+	path = _getenv("PATH");
+	splitpath = malloc(sizeof(char) * 1024);
+
+	pathtok = strtok(path, ":");
+
+	for (i = 0; pathtok != NULL; i++)
+	{
+		splitpath[i] = pathtok;
+		pathtok = strtok(NULL, ":");
+
+	}
+	return (splitpath);
+}
+/**
  * _strcpy - copies string
  * @dest: destination to be copied to
  * @src: source to be copied
