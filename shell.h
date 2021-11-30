@@ -36,4 +36,7 @@ char *_itoa(int n, char *str, int base);
 void reverse(char str[], int length);
 int print_min(void);
 int _isdigit(int c);
+char *_strcpy(char *dest, char *src);
+char *_strcat(char *dest, char *src);
+char *_getenv(const char *name);
 #endif
