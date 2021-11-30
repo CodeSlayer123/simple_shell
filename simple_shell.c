@@ -29,7 +29,7 @@ int simple_shell(void)
 	int length;
 	char **argv;
 	struct stat st;
-	char *pwd = getcwd(pwd, bufsize);
+	char *pwd = getcwd(pwd, bufsize), *hd = getcwd(pwd, bufsize);
 	int cd;
 
 	if (buffer == NULL)
@@ -51,7 +51,7 @@ int simple_shell(void)
 
 		if (strcmp(argv[0], "exit") == 0)
 		{
-			quit(argv)
+			quit(argv);
 			free(buffer);
 			exit(0);
 
@@ -59,6 +59,8 @@ int simple_shell(void)
 		if (_strcmp(argv[0], "cd") == 0)
 		{
 			cd = chdir(argv[1]);
+			if (!argv[1])
+				cd = chdir(hd);
 			if (cd != 0)
 			{
 				printf("./hsh: cd: %s: No such file or directory\n", argv[1]);
@@ -115,13 +117,13 @@ void quit(char **argv)
 	printf("exit\n");
 	if (!argv[1])
 	{
-		break;
+		exit(1);
 	}
 	else
 	{
 		if (argv[1][0] >= '0' && argv[1][0] <= '9')
 		{
-			break;
+			exit(1);
 		}
 		else
 		{
