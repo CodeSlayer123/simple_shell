@@ -43,19 +43,36 @@ int simple_shell(void)
 			free(buffer);
 			exit(0);
 		}
-		if (buffer[strlen(buffer) - 1] == '\0')
-		{
-			buffer[strlen(buffer) - 1] = '\0';
-		}
+
+		buffer[strlen(buffer) - 1] = '\0';
 		argv = splitter(buffer);
 
 		if (strcmp(argv[0], "exit") == 0)
 		{
-			quit(argv)
-			free(buffer);
-			exit(0);
+			printf("exit\n");
+			if (!argv[1])
+			{
+				free(buffer);
+				exit(0);
+			}
+			else
+			{
+				if (argv[1][0] >= '0' && argv[1][0] <= '9')
+				{
+					free(buffer);
+					exit(0);
+				}
+				else
+				{
+					printf("./hsh: exit: ");
+					printf("%s: numeric argument required\n", argv[1]);
+					free(buffer);
+					exit(0);
+				}
+			}
 
 		}
+
 		if (_strcmp(argv[0], "cd") == 0)
 		{
 			cd = chdir(argv[1]);
@@ -108,25 +125,4 @@ int execArgs(char **argv)
 	}
 
 return (0);
-}
-
-void quit(char **argv)
-{
-	printf("exit\n");
-	if (!argv[1])
-	{
-		break;
-	}
-	else
-	{
-		if (argv[1][0] >= '0' && argv[1][0] <= '9')
-		{
-			break;
-		}
-		else
-		{
-			printf("./hsh: exit: ");
-			printf("%s: numeric argument required\n", argv[1]);
-		}
-	}
 }
