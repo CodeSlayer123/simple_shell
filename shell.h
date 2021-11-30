@@ -20,6 +20,7 @@ typedef struct function
 int simple_shell(void);
 char **splitter(char fun[]);
 int execArgs(char **argv);
+int executePath(char *execPath, char **argv);
 int _strcmp(char *s1, char *s2);
 int _strcmp2(char s1, char *s2);
 int _strlen(char *s);
@@ -36,4 +37,9 @@ char *_itoa(int n, char *str, int base);
 void reverse(char str[], int length);
 int print_min(void);
 int _isdigit(int c);
+char *_strcpy(char *dest, char *src);
+char *_strcat(char *dest, char *src);
+char *_getenv(const char *name);
+char **_getPath(void);
+
 #endif

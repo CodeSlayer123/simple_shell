@@ -25,30 +25,39 @@ char **splitter(char fun[])
 int simple_shell(void)
 {
 	size_t bufsize = 200000;
-	char *buffer = malloc(bufsize * sizeof(char));
-	int length;
+	char *buffer;
 	char **argv;
+	int length;
 	struct stat st;
+	char **path = _getPath();
+	char *execPath = malloc(sizeof(char) * 1024);
+	int i;
 	char *pwd = getcwd(pwd, bufsize), *hd = getcwd(pwd, bufsize);
 	int cd;
 
+	buffer = malloc(bufsize * sizeof(char));
 	if (buffer == NULL)
+	{
 		return (-1);
+	}
 	do {
-		printf("#%s cisfun$ ", pwd);
+		printf("#cisnotfun$ ");
 		length = getline(&buffer, &bufsize, stdin);
+
 		if (length == EOF)
 		{
 			putchar('\n');
 			free(buffer);
-			exit(0);
+			exit(-1);
 		}
 
-		buffer[strlen(buffer) - 1] = '\0';
+		if (buffer[strlen(buffer) - 1] == '\n')
+		{
+			buffer[strlen(buffer) - 1] = '\0';
+		}
 		argv = splitter(buffer);
 		if (strcmp(argv[0], "exit") == 0)
 		{
-
 			printf("exit\n");
 			if (!argv[1] || (argv[1][0] >= '0' && argv[1][0] <= '9'))
 			{
@@ -62,10 +71,8 @@ int simple_shell(void)
 				free(buffer);
 				exit(0);
 			}
-
 		}
-
-		if (_strcmp(argv[0], "cd") == 0)
+		if (strcmp(argv[0], "cd") == 0)
 		{
 			cd = chdir(argv[1]);
 			if (!argv[1])
@@ -77,19 +84,40 @@ int simple_shell(void)
 			pwd = getcwd(pwd, bufsize);
 			continue;
 		}
-		if (_strcmp(argv[0], "pwd") == 0)
+		if (strcmp(argv[0], "pwd") == 0)
 		{
-			_printf("%s\n", pwd);
+			printf("%s\n", pwd);
 			continue;
 		}
 
-		if (stat(argv[0], &st) == 0)
+		if (strchr(argv[0], '/'))
 		{
-			execArgs(argv);
+			if (stat(argv[0], &st) == 0)
+			{
+				execArgs(argv);
+			}
+			else
+			{
+				printf("%s: not found\n", argv[0]);
+			}
 		}
 		else
 		{
-			printf("%s: 1: %s: not found\n", "./hsh", argv[0]);
+			for (i = 0; path[i] != NULL; i++)
+			{
+				strcpy(execPath, path[i]);
+				strcat(execPath, "/");
+				strcat(execPath, argv[0]);
+				if (stat(execPath, &st) == 0)
+				{
+					executePath(execPath, argv);
+					break;
+				}
+			}
+			if (path[i] == NULL)
+			{
+				printf("%s: not found\n", argv[0]);
+			}
 		}
 
 	} while (length != -1);
@@ -97,7 +125,27 @@ int simple_shell(void)
 	free(buffer);
 	return (0);
 }
+int executePath(char *execPath, char **argv)
+{
+	int status;
+	pid_t pid;
 
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("Error:");
+		return (-1);
+	}
+	if (pid == 0)
+	{
+		execve(execPath, argv, NULL);
+	}
+	else
+	{
+		wait(&status);
+	}
+	return (0);
+}
 int execArgs(char **argv)
 {
 	int status;
@@ -109,18 +157,13 @@ int execArgs(char **argv)
 		perror("Error:");
 		return (-1);
 	}
-	if (pid != 0)
-	{
-		wait(&status);
-	}
 	if (pid == 0)
 	{
 		execve(argv[0], argv, NULL);
 	}
-
-return (0);
+	else
+	{
+		wait(&status);
+	}
+	return (0);
 }
-
-
-
-
