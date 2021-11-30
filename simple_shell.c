@@ -46,31 +46,21 @@ int simple_shell(void)
 
 		buffer[strlen(buffer) - 1] = '\0';
 		argv = splitter(buffer);
-
 		if (strcmp(argv[0], "exit") == 0)
 		{
 			printf("exit\n");
-			if (!argv[1])
+			if (!argv[1] || (argv[1][0] >= '0' && argv[1][0] <= '9'))
 			{
 				free(buffer);
 				exit(0);
 			}
 			else
 			{
-				if (argv[1][0] >= '0' && argv[1][0] <= '9')
-				{
-					free(buffer);
-					exit(0);
-				}
-				else
-				{
-					printf("./hsh: exit: ");
-					printf("%s: numeric argument required\n", argv[1]);
-					free(buffer);
-					exit(0);
-				}
+				printf("./hsh: exit: ");
+				printf("%s: numeric argument required\n", argv[1]);
+				free(buffer);
+				exit(0);
 			}
-
 		}
 
 		if (_strcmp(argv[0], "cd") == 0)
