@@ -1,0 +1,35 @@
+.\" Manpage for hsh
+.TH man 1 "December 2021" "1.0" "hsh man page"
+.SH NAME
+shs \- a recreation sh shell
+.SH SYNOPSIS
+
+./hsh to run terminal
+
+.SH DESCRIPTION
+hsh is a command language interpreter that executes commands or a given file from a command line, also known as standard input.
+
+.SH USAGE
+Compilation can be done with the following command line:
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+
+.SH SUPPORTED BUILTINS
+
+cd - changed directory to home if no arguments are passed, or to directory specified cd's first argument
+
+env - Prints all environmental variables
+
+exit - exits terminal
+
+.SH OPERANDS
+Hsh supports these operands:
+
+command_name - supported builtin listed above
+
+command_file - any executable file in the current directory or in the PATH. If file is not in the PATH, a '/' character will be needed before the file name in order to execute it. If the file is in the current directory, a './' can be typed before file name to execute it.
+.SH SEE ALSO
+Non-interactive mode is also supported. Example usage:
+cat test_ls_2 | ./hsh
+
+.SH AUTHOR
+Alex Leeper and James Williams
