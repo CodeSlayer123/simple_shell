@@ -67,19 +67,25 @@ char *_strcat(char *dest, char *src)
 }
 /**
  * _getenv - gets environmental variables
- * @name: name
+ * @var: name
  * Return: path on success
  */
-char *_getenv(const char *name)
+char * _getenv(char *var)
 {
-	int i;
-	size_t l = strlen(name);
+	char *envvar = malloc(sizeof(char) * 1024);
+	char *envfinal = malloc(sizeof(char) * 1024);
+	char *envtok;
+	int x, len = _strlen(var);
 
-	if (!__environ || !*name || strchr(name, '='))
-		return (NULL);
-	for (i = 0; __environ[i] && (strncmp(name, __environ[i], l)
-								|| __environ[i][l] != '='); i++)
-	if (__environ[i])
-		return (__environ[i] + l + 1);
-	return (NULL);
+	for (x = 0; environ[x] != NULL; x++)
+	{
+		if (strncmp(var, environ[x], len) == 0)
+		{
+			_strcpy(envvar, environ[x]);
+			envtok = strtok(envvar, "=");
+			envtok = strtok(NULL, "=");
+			_strcpy(envfinal, envtok);
+		}
+	}
+	return(envfinal);
 }
