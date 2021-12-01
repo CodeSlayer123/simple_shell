@@ -1,5 +1,5 @@
 #include "shell.h"
-
+char *hd;
 /**
  * simple_shell - initializes the shell
  * Return: 0 on success
@@ -11,8 +11,8 @@ int simple_shell(void)
 	char **argv;
 	int length;
 	struct stat st;
-	int cd;
 
+	hd = getcwd(hd, 1024);
 	if (buffer == NULL)
 		return (-1);
 	do {
@@ -29,14 +29,18 @@ int simple_shell(void)
 		argv = splitter(buffer);
 		if (strcmp(argv[0], "exit") == 0)
 		{
-			printf("exit\n");
+			printf("./hsh: exit\n");
 			if (!argv[1] || (argv[1][0] >= '0' && argv[1][0] <= '9'))
 			{
 				free(buffer);
 				exit(0);
 			}
-			free(buffer);
-			exit(0);
+			else
+			{
+				printf("./hsh: %s: numeric argument required\n", argv[1]);
+				free(buffer);
+				exit(0);
+			}
 		}
 		checkArgs(argv, st);
 	} while (length != -1);
@@ -55,8 +59,10 @@ int checkArgs(char **argv, struct stat st)
 {
 	char **path = _getPath();
 	char *execPath = malloc(sizeof(char) * 1024);
-	char *cwd = getcwd(cwd, 1024), *hd = getcwd(cwd, 1024);
+	char *cwd = malloc(sizeof(char));
 	int i;
+
+	cwd = getcwd(cwd, 1024);
 
 	if (strcmp(argv[0], "cd") == 0)
 	{
@@ -133,9 +139,12 @@ char *execCD(char **argv, char *cwd, char *hd)
 {
 	int cd;
 
-	cd = chdir(argv[1]);
 	if (!argv[1])
 		cd = chdir(hd);
+	else
+	{
+		cd = chdir(argv[1]);
+	}
 	if (cd != 0)
 		printf("./hsh: cd: %s: No such file or directory\n", argv[1]);
 	cwd = getcwd(cwd, 1024);
