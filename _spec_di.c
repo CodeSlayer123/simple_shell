@@ -5,7 +5,7 @@
  * @args: variadic uint to print from pr_uints
  * Return: returns length of str - 1
  */
-int _spec_u(va_list *args) 
+int _spec_u(va_list *args)
 {
 	unsigned int n = va_arg(*args, unsigned int);
 	int i;
@@ -23,7 +23,7 @@ int _spec_u(va_list *args)
 /**
  * pr_uints - function to pass into pr_uint
  * @c: unsigned int to pass
- * 
+ *
  */
 void pr_uints(unsigned int c)
 {
@@ -36,7 +36,7 @@ void pr_uints(unsigned int c)
  * @args: variadic int to print
  * Return: returns i
  */
-int _spec_di(va_list *args) 
+int _spec_di(va_list *args)
 {
 	int i;
 	char s[13];

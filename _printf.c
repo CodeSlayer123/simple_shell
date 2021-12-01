@@ -1,10 +1,9 @@
 #include "shell.h"
 
 /**
- * _get_func - finds a function based on the conversion specifier and returns it.
+ * _get_func - gets the function for a conversion specifier.
  *
  * @s: The conversion specifier
- * @args: The argument list
  * Return: The function matching the conversion specifier
  */
 int (*_get_func(char s))(va_list * args)

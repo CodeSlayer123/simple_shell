@@ -70,7 +70,7 @@ char *_strcat(char *dest, char *src)
  * @var: name
  * Return: path on success
  */
-char * _getenv(char *var)
+char *_getenv(char *var)
 {
 	char *envvar = malloc(sizeof(char) * 1024);
 	char *envfinal = malloc(sizeof(char) * 1024);
@@ -87,5 +87,5 @@ char * _getenv(char *var)
 			_strcpy(envfinal, envtok);
 		}
 	}
-	return(envfinal);
+	return (envfinal);
 }
