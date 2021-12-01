@@ -57,17 +57,17 @@ int simple_shell(void)
 				free(buffer);
 				exit(0);
 			}
-			else
-			{
-				printf("./hsh: exit: ");
-				printf("%s: numeric argument required\n", argv[1]);
-				free(buffer);
-				exit(0);
-			}
+			free(buffer);
+			exit(0);
 		}
 		if (strcmp(argv[0], "cd") == 0)
 		{
 			cwd = execCD(argv, cwd, hd);
+			continue;
+		}
+		if (strcmp(argv[0], "env") == 0)
+		{
+			execEnv();
 			continue;
 		}
 		if (strchr(argv[0], '/'))
@@ -131,4 +131,14 @@ char *execCD(char **argv, char *cwd, char *hd)
 		printf("./hsh: cd: %s: No such file or directory\n", argv[1]);
 	cwd = getcwd(cwd, 1024);
 	return (cwd);
+}
+
+int execEnv(void)
+{
+	int i;
+	
+	for (i = 0; environ[i] != NULL; i++)
+		_printf("%s\n", environ[i]);
+
+return (0);
 }
