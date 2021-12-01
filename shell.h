@@ -11,6 +11,14 @@
 #include <stddef.h>
 #include <limits.h>
 
+/**
+ * struct function - a function struct for _printf
+ * @spec: The conversion specifier
+ * @funct: A function pointer to the corresponding conversion spec
+ * Description: A structure to connect the a
+ * conversion specifier with the corresponding
+ * function when using _printf.
+ */
 typedef struct function
 {
 	char *spec;
@@ -21,8 +29,11 @@ extern char **environ;
 
 int simple_shell(void);
 char **splitter(char fun[]);
+char *execCD(char **argv, char *cwd, char *hd);
+int execEnv(void);
 int execArgs(char **argv);
 int executePath(char *execPath, char **argv);
+int checkArgs(char **argv, struct stat st);
 int _strcmp(char *s1, char *s2);
 int _strcmp2(char s1, char *s2);
 int _strlen(char *s);
@@ -41,7 +52,7 @@ int print_min(void);
 int _isdigit(int c);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
-char * _getenv(char *var);
+char *_getenv(char *var);
 char **_getPath(void);
 
 #endif
