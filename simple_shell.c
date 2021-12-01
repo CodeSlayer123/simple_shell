@@ -25,36 +25,29 @@ char **splitter(char fun[])
 int simple_shell(void)
 {
 	size_t bufsize = 200000;
-	char *buffer;
+	char *buffer = malloc(bufsize * sizeof(char));
 	char **argv;
 	int length;
 	struct stat st;
 	char **path = _getPath();
 	char *execPath = malloc(sizeof(char) * 1024);
 	int i;
-	char *pwd = getcwd(pwd, bufsize), *hd = getcwd(pwd, bufsize);
+	char *cwd = getcwd(cwd, bufsize), *hd = getcwd(cwd, bufsize);
 	int cd;
 
-	buffer = malloc(bufsize * sizeof(char));
 	if (buffer == NULL)
-	{
 		return (-1);
-	}
 	do {
 		printf("#cisnotfun$ ");
 		length = getline(&buffer, &bufsize, stdin);
-
 		if (length == EOF)
 		{
 			putchar('\n');
 			free(buffer);
 			exit(-1);
 		}
-
 		if (buffer[strlen(buffer) - 1] == '\n')
-		{
 			buffer[strlen(buffer) - 1] = '\0';
-		}
 		argv = splitter(buffer);
 		if (strcmp(argv[0], "exit") == 0)
 		{
@@ -74,32 +67,15 @@ int simple_shell(void)
 		}
 		if (strcmp(argv[0], "cd") == 0)
 		{
-			cd = chdir(argv[1]);
-			if (!argv[1])
-				cd = chdir(hd);
-			if (cd != 0)
-			{
-				printf("./hsh: cd: %s: No such file or directory\n", argv[1]);
-			}
-			pwd = getcwd(pwd, bufsize);
+			cwd = execCD(argv, cwd, hd);
 			continue;
 		}
-		if (strcmp(argv[0], "pwd") == 0)
-		{
-			printf("%s\n", pwd);
-			continue;
-		}
-
 		if (strchr(argv[0], '/'))
 		{
 			if (stat(argv[0], &st) == 0)
-			{
-				execArgs(argv);
-			}
+				executePath(argv[0], argv);
 			else
-			{
 				printf("%s: not found\n", argv[0]);
-			}
 		}
 		else
 		{
@@ -115,16 +91,13 @@ int simple_shell(void)
 				}
 			}
 			if (path[i] == NULL)
-			{
 				printf("%s: not found\n", argv[0]);
-			}
 		}
-
 	} while (length != -1);
-
 	free(buffer);
-	return (0);
+return (0);
 }
+
 int executePath(char *execPath, char **argv)
 {
 	int status;
@@ -146,24 +119,16 @@ int executePath(char *execPath, char **argv)
 	}
 	return (0);
 }
-int execArgs(char **argv)
-{
-	int status;
-	pid_t pid;
 
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("Error:");
-		return (-1);
-	}
-	if (pid == 0)
-	{
-		execve(argv[0], argv, NULL);
-	}
-	else
-	{
-		wait(&status);
-	}
-	return (0);
+char *execCD(char **argv, char *cwd, char *hd)
+{
+	int cd;
+	
+	cd = chdir(argv[1]);
+	if (!argv[1])
+		cd = chdir(hd);
+	if (cd != 0)
+		printf("./hsh: cd: %s: No such file or directory\n", argv[1]);
+	cwd = getcwd(cwd, 1024);
+	return (cwd);
 }
