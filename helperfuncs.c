@@ -8,12 +8,16 @@ char **_getPath(void)
 	char *pathtok;
 	char *path;
 	int i;
-	char **splitpath = malloc(sizeof(char *) * 1024);
+	char **splitpath = malloc(sizeof(char *) * 1024);;
 
-	path = _getenv("PATH");
+	for (i = 0; i < 1024; i++)
+	{
+		splitpath[i] = NULL;
+	}
+	path = _getenv("PATH");	
 	if (splitpath == NULL)
 	{
-		free(path);
+		free(splitpath);
 		return (0);
 	}
 	pathtok = strtok(path, ":");
@@ -22,7 +26,6 @@ char **_getPath(void)
 	{
 		splitpath[i] = pathtok;
 		pathtok = strtok(NULL, ":");
-
 	}
 	return (splitpath);
 }
@@ -91,8 +94,7 @@ char *_getenv(char *env)
 				if (env[content + 1] == '\0' &&
 					environ[line][content + 1] == '=')
 				{ /* duplicate everything past the equals */
-					name = _strdup(
-						&(environ[line][content + 2]));
+					name = _strdup(&(environ[line][content + 2]));
 					return (name);
 				}
 			}
