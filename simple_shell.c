@@ -9,40 +9,33 @@ int simple_shell(void)
 	size_t bufsize = 200000;
 	char *buffer = malloc(bufsize * sizeof(char));
 	char **argv;
-	int length;
+	int length, exitStatus = 0;
 	struct stat st;
 
 	hd = getcwd(hd, 1024);
 	if (buffer == NULL)
-		return (-1);
+		return (0);
 	do {
-		printf("$ ");
+		_printf("$ ");
 		length = getline(&buffer, &bufsize, stdin);
 		if (length == EOF)
 		{
-			putchar('\n');
+			_printf("\n");
+			if (argv != NULL)
+				free(argv);
 			free(buffer);
-			exit(-1);
+			exit(0);
 		}
-		if (buffer[strlen(buffer) - 1] == '\n')
-			buffer[strlen(buffer) - 1] = '\0';
+		if (buffer[_strlen(buffer) - 1] == '\n')
+			buffer[_strlen(buffer) - 1] = '\0';
 		argv = splitter(buffer);
 		if (strcmp(argv[0], "exit") == 0)
 		{
-			printf("./hsh: exit\n");
-			if (!argv[1] || (argv[1][0] >= '0' && argv[1][0] <= '9'))
-			{
 				free(buffer);
-				exit(0);
-			}
-			else
-			{
-				printf("./hsh: %s: numeric argument required\n", argv[1]);
-				free(buffer);
-				exit(0);
-			}
+				free(argv);
+				exit(exitStatus);
 		}
-		checkArgs(argv, st);
+		exitStatus = checkArgs(argv, st);
 	} while (length != -1);
 	free(buffer);
 return (0);
@@ -59,7 +52,7 @@ int checkArgs(char **argv, struct stat st)
 	char **path = _getPath();
 	char *execPath = malloc(sizeof(char) * 1024);
 	char *cwd = malloc(sizeof(char));
-	int i;
+	int i, exitStatus = 0;
 
 	cwd = getcwd(cwd, 1024);
 
@@ -76,15 +69,15 @@ int checkArgs(char **argv, struct stat st)
 		if (stat(argv[0], &st) == 0)
 			executePath(argv[0], argv);
 		else
-			printf("%s: not found\n", argv[0]);
+			_printf("%s: not found\n", argv[0]), exitStatus = 127;
 	}
 	else
 	{
 		for (i = 0; path[i] != NULL; i++)
 		{
-			strcpy(execPath, path[i]);
-			strcat(execPath, "/");
-			strcat(execPath, argv[0]);
+			_strcpy(execPath, path[i]);
+			_strcat(execPath, "/");
+			_strcat(execPath, argv[0]);
 			if (stat(execPath, &st) == 0)
 			{
 				executePath(execPath, argv);
@@ -92,9 +85,9 @@ int checkArgs(char **argv, struct stat st)
 			}
 		}
 		if (path[i] == NULL)
-			printf("%s: not found\n", argv[0]);
+			_printf("%s: not found\n", argv[0]), exitStatus = 127;
 	}
-return (0);
+return (exitStatus);
 }
 /**
  * executePath - executes a program found on the PATH.
@@ -143,7 +136,7 @@ char *execCD(char **argv, char *cwd, char *hd)
 		cd = chdir(argv[1]);
 	}
 	if (cd != 0)
-		printf("./hsh: cd: %s: No such file or directory\n", argv[1]);
+		_printf("./hsh: cd: %s: No such file or directory\n", argv[1]);
 	cwd = getcwd(cwd, 1024);
 	return (cwd);
 }
