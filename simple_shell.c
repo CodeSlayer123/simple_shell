@@ -147,7 +147,6 @@ char *execCD(char **argv, char *cwd, char *hd)
 	cwd = getcwd(cwd, 1024);
 	return (cwd);
 }
-
 /**
  * execEnv - Displays the entire working environment variable.
  * Return: 0 on success
