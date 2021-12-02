@@ -1,7 +1,7 @@
 .\" Manpage for hsh
 .TH man 1 "December 2021" "1.0" "hsh man page"
 .SH NAME
-shs \- a recreation sh shell
+hsh \- a recreation sh shell
 .SH SYNOPSIS
 
 ./hsh to run terminal

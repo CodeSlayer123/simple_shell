@@ -15,7 +15,7 @@
  * struct function - a function struct for _printf
  * @spec: The conversion specifier
  * @funct: A function pointer to the corresponding conversion spec
- * Description: A structure to connect the a
+ * Description: A structure to connect a
  * conversion specifier with the corresponding
  * function when using _printf.
  */
@@ -52,6 +52,8 @@ int print_min(void);
 int _isdigit(int c);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
+char *_strchr(char *s, char c);
+char *_strdup(char *str);
 char *_getenv(char *var);
 char **_getPath(void);
 

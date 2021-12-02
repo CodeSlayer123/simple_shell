@@ -8,11 +8,9 @@ char **_getPath(void)
 	char *pathtok;
 	char *path;
 	int i;
-	char **splitpath;
+	char **splitpath = malloc(sizeof(char *) * 1024);;
 
-	path = _getenv("PATH");
-	splitpath = malloc(sizeof(char) * 1024);
-
+	path = _getenv("PATH");	
 	if (splitpath == NULL)
 	{
 		free(path);
@@ -26,7 +24,6 @@ char **_getPath(void)
 		pathtok = strtok(NULL, ":");
 
 	}
-	free(path);
 	return (splitpath);
 }
 /**
@@ -76,23 +73,54 @@ char *_strcat(char *dest, char *src)
  * @var: name
  * Return: path on success
  */
-char *_getenv(char *var)
+char *_getenv(char *env)
 {
-	char *envvar = malloc(sizeof(char) * 1024);
-	char *envfinal = malloc(sizeof(char) * 1024);
-	char *envtok;
-	int x, len = _strlen(var);
-
-	for (x = 0; environ[x] != NULL; x++)
-	{
-		if (strncmp(var, environ[x], len) == 0)
+	int content, line;
+	char *name = NULL;
+	/* iterate each line in the environment */
+	for (line = 0; environ[line] != NULL; line++)
+	{ /* iterate each letter until we see a = */
+		for (content = 0; environ[line][content] != '='; content++)
 		{
-			_strcpy(envvar, environ[x]);
-			envtok = strtok(envvar, "=");
-			envtok = strtok(NULL, "=");
-			_strcpy(envfinal, envtok);
+			if (environ[line][content] != env[content])
+			{
+				break;
+			} /* check that this env var name is what we're looking for */
+			if (environ[line][content] == env[content])
+			{ /* we've hit the end of our search string */
+				if (env[content + 1] == '\0' &&
+					environ[line][content + 1] == '=')
+				{ /* duplicate everything past the equals */
+					name = _strdup(
+						&(environ[line][content + 2]));
+					return (name);
+				}
+			}
 		}
 	}
-	free(envvar);
-	return (envfinal);
+	return (NULL);
+}
+
+/**
+ * _strchr - Locates a character in a string.
+ *
+ * @s: the string to be searched
+ * @c: The character to find
+ *
+ * Return: The pointer to the first occurence of c, or NULL if not found.
+ */
+char *_strchr(char *s, char c)
+{
+	unsigned int i;
+	char *p = s;
+
+	for (i = 0; s[i] != '\0'; i++)
+	{
+		if (s[i] == c)
+		{
+			return (p);
+		}
+		p = p + 1;
+	}
+return (NULL);
 }

@@ -6,7 +6,7 @@ char *hd;
  */
 int simple_shell(void)
 {
-	size_t bufsize = 200000;
+	size_t bufsize = 2097152;
 	char *buffer = malloc(bufsize * sizeof(char));
 	char **argv;
 	int length, exitStatus = 0;
@@ -14,24 +14,20 @@ int simple_shell(void)
 
 	hd = getcwd(hd, 1024);
 	if (buffer == NULL)
-		return (0);
+		return (-1);
 	do {
-		if (isatty(STDIN_FILENO))
-			_printf("$ ");
+		printf("$ ");
 		length = getline(&buffer, &bufsize, stdin);
 		if (length == EOF)
 		{
-			if (isatty(STDIN_FILENO))
-				_printf("\n");
-			if (argv != NULL)
-				free(argv);
+			putchar('\n');
 			free(buffer);
-			exit(0);
+			exit(-1);
 		}
 		if (buffer[_strlen(buffer) - 1] == '\n')
 			buffer[_strlen(buffer) - 1] = '\0';
 		argv = splitter(buffer);
-		if (strcmp(argv[0], "exit") == 0)
+		if (_strcmp(argv[0], "exit") == 0)
 		{
 				free(buffer);
 				free(argv);
@@ -40,7 +36,7 @@ int simple_shell(void)
 		exitStatus = checkArgs(argv, st);
 		free(argv);
 	} while (length != -1);
-	return (0);
+return (0);
 }
 /**
  * checkArgs - Checks for builtins and other commands in the PATH
@@ -53,20 +49,20 @@ int checkArgs(char **argv, struct stat st)
 {
 	char **path = _getPath();
 	char *execPath = malloc(sizeof(char) * 1024);
-	char *cwd = malloc(sizeof(char));
+	char *cwd = malloc(sizeof(char) * 1024);
 	int i, exitStatus = 0;
 
 	cwd = getcwd(cwd, 1024);
 
-	if (strcmp(argv[0], "cd") == 0)
+	if (_strcmp(argv[0], "cd") == 0)
 	{
 		cwd = execCD(argv, cwd, hd);
 	}
-	else if (strcmp(argv[0], "env") == 0)
+	else if (_strcmp(argv[0], "env") == 0)
 	{
 		execEnv();
 	}
-	else if (strchr(argv[0], '/'))
+	else if (_strchr(argv[0], '/'))
 	{
 		if (stat(argv[0], &st) == 0)
 			executePath(argv[0], argv);
@@ -89,8 +85,7 @@ int checkArgs(char **argv, struct stat st)
 		if (path[i] == NULL)
 			_printf("%s: not found\n", argv[0]), exitStatus = 127;
 	}
-	free(execPath);
-	free(cwd);
+	free(path), free(cwd), free(execPath);
 return (exitStatus);
 }
 /**
@@ -104,7 +99,13 @@ int executePath(char *execPath, char **argv)
 {
 	int status;
 	pid_t pid;
+	int i;
 
+	for (i = 0; argv[i] != NULL; i++)
+	{
+		if (argv[i + 1] == NULL)
+			argv[i + 1] = '\0';
+	}
 	pid = fork();
 	if (pid == -1)
 	{
@@ -140,7 +141,7 @@ char *execCD(char **argv, char *cwd, char *hd)
 		cd = chdir(argv[1]);
 	}
 	if (cd != 0)
-		_printf("./hsh: cd: %s: No such file or directory\n", argv[1]);
+		printf("./hsh: cd: %s: No such file or directory\n", argv[1]);
 	cwd = getcwd(cwd, 1024);
 	return (cwd);
 }

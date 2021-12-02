@@ -10,10 +10,10 @@ char **splitter(char fun[])
 {
 	char **holder;
 	char *tmp;
-	long int length = _strlen(fun);
+	long int length = strlen(fun);
 	int i = 0;
 
-	holder = malloc(sizeof(char) * (length * 2));
+	holder = malloc(sizeof(char *) * (length * 2));
 
 	tmp = strtok(fun, " ");
 	holder[i] = tmp;
