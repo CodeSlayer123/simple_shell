@@ -8,9 +8,9 @@ char **_getPath(void)
 	char *pathtok;
 	char *path;
 	int i;
-	char **splitpath = malloc(sizeof(char *) * 1024);;
+	char **splitpath = malloc(sizeof(char *) * 1024);
 
-	path = _getenv("PATH");	
+	path = _getenv("PATH");
 	if (splitpath == NULL)
 	{
 		free(path);
