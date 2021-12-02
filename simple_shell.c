@@ -16,11 +16,13 @@ int simple_shell(void)
 	if (buffer == NULL)
 		return (0);
 	do {
-		_printf("$ ");
+		if (isatty(STDIN_FILENO))
+			_printf("$ ");
 		length = getline(&buffer, &bufsize, stdin);
 		if (length == EOF)
 		{
-			_printf("\n");
+			if (isatty(STDIN_FILENO))
+				_printf("\n");
 			if (argv != NULL)
 				free(argv);
 			free(buffer);
