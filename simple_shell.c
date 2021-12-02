@@ -38,9 +38,9 @@ int simple_shell(void)
 				exit(exitStatus);
 		}
 		exitStatus = checkArgs(argv, st);
+		free(argv);
 	} while (length != -1);
-	free(buffer);
-return (0);
+	return (0);
 }
 /**
  * checkArgs - Checks for builtins and other commands in the PATH
@@ -89,6 +89,8 @@ int checkArgs(char **argv, struct stat st)
 		if (path[i] == NULL)
 			_printf("%s: not found\n", argv[0]), exitStatus = 127;
 	}
+	free(execPath);
+	free(cwd);
 return (exitStatus);
 }
 /**

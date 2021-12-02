@@ -13,6 +13,11 @@ char **_getPath(void)
 	path = _getenv("PATH");
 	splitpath = malloc(sizeof(char) * 1024);
 
+	if (splitpath == NULL)
+	{
+		free(path);
+		return (0);
+	}
 	pathtok = strtok(path, ":");
 
 	for (i = 0; pathtok != NULL; i++)
@@ -21,6 +26,7 @@ char **_getPath(void)
 		pathtok = strtok(NULL, ":");
 
 	}
+	free(path);
 	return (splitpath);
 }
 /**
@@ -49,7 +55,7 @@ char *_strcpy(char *dest, char *src)
  */
 char *_strcat(char *dest, char *src)
 {
-int len = 0;
+	int len = 0;
 	int i = 0;
 
 	while (*(dest + len) != '\0')
@@ -87,5 +93,6 @@ char *_getenv(char *var)
 			_strcpy(envfinal, envtok);
 		}
 	}
+	free(envvar);
 	return (envfinal);
 }
