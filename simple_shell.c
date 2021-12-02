@@ -47,7 +47,6 @@ int simple_shell(void)
 	free(buffer);
 return (0);
 }
-
 /**
  * checkArgs - Checks for builtins and other commands in the PATH
  *
