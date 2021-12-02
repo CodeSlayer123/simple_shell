@@ -96,7 +96,6 @@ int checkArgs(char **argv, struct stat st)
 	}
 return (0);
 }
-
 /**
  * executePath - executes a program found on the PATH.
  *
