@@ -16,7 +16,7 @@ int simple_shell(void)
 	if (buffer == NULL)
 		return (-1);
 	do {
-		printf("#cisnotfun$ ");
+		printf("$ ");
 		length = getline(&buffer, &bufsize, stdin);
 		if (length == EOF)
 		{
