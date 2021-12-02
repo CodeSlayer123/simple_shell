@@ -124,7 +124,6 @@ int executePath(char *execPath, char **argv)
 	}
 	return (0);
 }
-
 /**
  * execCD - Changes the current working directory
  *
