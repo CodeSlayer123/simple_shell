@@ -33,7 +33,7 @@ char *execCD(char **argv, char *cwd, char *hd);
 int execEnv(void);
 int execArgs(char **argv);
 int executePath(char *execPath, char **argv);
-int checkArgs(char **argv, struct stat st);
+int checkArgs(char **argv, char **av, int count);
 int _strcmp(char *s1, char *s2);
 int _strcmp2(char s1, char *s2);
 int _strlen(char *s);

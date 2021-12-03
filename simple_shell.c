@@ -4,13 +4,12 @@
  * @av: The argument
  * Return: 0 on success
  */
-int simple_shell(__attribute__((unused)) char **av)
+int simple_shell(char **av)
 {
 	size_t bufsize = 2097152;
 	char *buffer = malloc(bufsize * sizeof(char)), *tmp = buffer;
 	char **argv;
 	int length, exitStatus = 0, count = 0;
-	struct stat st;
 
 	if (buffer == NULL)
 		return (-1);
@@ -39,7 +38,7 @@ int simple_shell(__attribute__((unused)) char **av)
 				argv = splitter(buffer);
 				if (_strcmp(argv[0], "exit") == 0)
 					free(buffer), free(argv), exit(exitStatus);
-				exitStatus = checkArgs(argv, st);
+				exitStatus = checkArgs(argv, av, count);
 			}
 		}
 		free(argv);
@@ -53,11 +52,12 @@ return (0);
  * @st: The stat structure to use when checking for args
  * Return: 0 on success
  */
-int checkArgs(char **argv, struct stat st)
+int checkArgs(char **argv, char **av, int count)
 {
 	char **path = _getPath();
 	char *execPath = malloc(sizeof(char) * 1024);
 	int i, exitStatus = 0;
+    struct stat st;
 
 	if (_strcmp(argv[0], "env") == 0)
 	{
@@ -68,7 +68,10 @@ int checkArgs(char **argv, struct stat st)
 		if (stat(argv[0], &st) == 0)
 			executePath(argv[0], argv);
 		else
-			_printf("%s: not found\n", argv[0]), exitStatus = 127;
+		{
+			_printf("%s: %d: %s: not found\n", av[0], count, argv[0]);
+			exitStatus = 127;
+		}
 	}
 	else
 	{
@@ -84,7 +87,10 @@ int checkArgs(char **argv, struct stat st)
 			}
 		}
 		if (path[i] == NULL)
-			_printf("%s: not found\n", argv[0]), exitStatus = 127;
+		{
+			_printf("%s: %d: %s: not found\n", av[0], count, argv[0]);
+			exitStatus = 127;
+		}
 	}
 	free(path), free(execPath);
 return (exitStatus);
