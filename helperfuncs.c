@@ -8,13 +8,13 @@ char **_getPath(void)
 	char *pathtok;
 	char *path;
 	int i;
-	char **splitpath = malloc(sizeof(char *) * 1024);;
+	char **splitpath = malloc(sizeof(char *) * 1024);
 
 	for (i = 0; i < 1024; i++)
 	{
 		splitpath[i] = NULL;
 	}
-	path = _getenv("PATH");	
+	path = getenv("PATH");	
 	if (splitpath == NULL)
 	{
 		free(splitpath);
@@ -26,6 +26,7 @@ char **_getPath(void)
 	{
 		splitpath[i] = pathtok;
 		pathtok = strtok(NULL, ":");
+
 	}
 	return (splitpath);
 }
@@ -44,7 +45,7 @@ char *_strcpy(char *dest, char *src)
 	{
 		dest[i] = src[i];
 	}
-	dest[i++] = '\0';
+	dest[i] = '\0';
 	return (dest);
 }
 /**
@@ -76,31 +77,16 @@ char *_strcat(char *dest, char *src)
  * @var: name
  * Return: path on success
  */
-char *_getenv(char *env)
+char *_getenv(const char *name)
 {
-	int content, line;
-	char *name = NULL;
-	/* iterate each line in the environment */
-	for (line = 0; environ[line] != NULL; line++)
-	{ /* iterate each letter until we see a = */
-		for (content = 0; environ[line][content] != '='; content++)
-		{
-			if (environ[line][content] != env[content])
-			{
-				break;
-			} /* check that this env var name is what we're looking for */
-			if (environ[line][content] == env[content])
-			{ /* we've hit the end of our search string */
-				if (env[content + 1] == '\0' &&
-					environ[line][content + 1] == '=')
-				{ /* duplicate everything past the equals */
-					name = _strdup(&(environ[line][content + 2]));
-					return (name);
-				}
-			}
-		}
-	}
-	return (NULL);
+	int i;
+	size_t l = strlen(name);
+
+	if (!__environ || !*name || strchr(name, '=')) return NULL;
+	for (i=0; __environ[i] && (strncmp(name, __environ[i], l)
+		|| __environ[i][l] != '='); i++);
+	if (__environ[i]) return __environ[i] + l+1;
+	return NULL;
 }
 
 /**

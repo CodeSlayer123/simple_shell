@@ -1,39 +1,53 @@
 #include "shell.h"
-char *hd;
 /**
  * simple_shell - initializes the shell
  * Return: 0 on success
  */
-int simple_shell(void)
+int simple_shell(__attribute__((unused)) char **av)
 {
 	size_t bufsize = 2097152;
-	char *buffer = malloc(bufsize * sizeof(char));
+	char *buffer = malloc(bufsize * sizeof(char)), *tmp = buffer;
 	char **argv;
-	int length, exitStatus = 0;
+	int length, exitStatus = 0, count = 0;
 	struct stat st;
 
-	hd = getcwd(hd, 1024);
 	if (buffer == NULL)
 		return (-1);
 	do {
-		printf("$ ");
+		if (isatty(STDIN_FILENO))
+			_printf("$ ");
 		length = getline(&buffer, &bufsize, stdin);
+		count ++;
 		if (length == EOF)
 		{
-			putchar('\n');
-			free(buffer);
-			exit(-1);
+			if (isatty(STDIN_FILENO))
+				_printf("\n");
+			free(tmp);
+			exit(0);
 		}
-		if (buffer[_strlen(buffer) - 1] == '\n')
-			buffer[_strlen(buffer) - 1] = '\0';
-		argv = splitter(buffer);
-		if (_strcmp(argv[0], "exit") == 0)
+		
+		if (_strcmp(buffer, "\n") == 0)
+			continue;
+		else
 		{
-				free(buffer);
-				free(argv);
-				exit(exitStatus);
+			if (buffer[_strlen(buffer) - 1] == '\n')
+				buffer[_strlen(buffer) - 1] = '\0';
+			while (*buffer == ' ')
+				buffer++;
+			if (_strcmp(buffer, " ") == 0)
+				continue;
+			else
+			{
+				argv = splitter(buffer);
+				if (_strcmp(argv[0], "exit") == 0)
+				{
+					free(buffer);
+					free(argv);
+					exit(exitStatus);
+				}
+				exitStatus = checkArgs(argv, st);
+			}
 		}
-		exitStatus = checkArgs(argv, st);
 		free(argv);
 	} while (length != -1);
 return (0);
@@ -49,16 +63,9 @@ int checkArgs(char **argv, struct stat st)
 {
 	char **path = _getPath();
 	char *execPath = malloc(sizeof(char) * 1024);
-	char *cwd = malloc(sizeof(char) * 1024);
 	int i, exitStatus = 0;
 
-	cwd = getcwd(cwd, 1024);
-
-	if (_strcmp(argv[0], "cd") == 0)
-	{
-		cwd = execCD(argv, cwd, hd);
-	}
-	else if (_strcmp(argv[0], "env") == 0)
+	if (_strcmp(argv[0], "env") == 0)
 	{
 		execEnv();
 	}
@@ -85,7 +92,7 @@ int checkArgs(char **argv, struct stat st)
 		if (path[i] == NULL)
 			_printf("%s: not found\n", argv[0]), exitStatus = 127;
 	}
-	free(path), free(cwd), free(execPath);
+	free(path), free(execPath);
 return (exitStatus);
 }
 /**
@@ -121,29 +128,6 @@ int executePath(char *execPath, char **argv)
 		wait(&status);
 	}
 	return (0);
-}
-/**
- * execCD - Changes the current working directory
- *
- * @argv: The array of arguments passed into the shell
- * @cwd: The current working directory
- * @hd: The home directory of the shell
- * Return: A pointer to the new current working directory.
- */
-char *execCD(char **argv, char *cwd, char *hd)
-{
-	int cd;
-
-	if (!argv[1])
-		cd = chdir(hd);
-	else
-	{
-		cd = chdir(argv[1]);
-	}
-	if (cd != 0)
-		printf("./hsh: cd: %s: No such file or directory\n", argv[1]);
-	cwd = getcwd(cwd, 1024);
-	return (cwd);
 }
 /**
  * execEnv - Displays the entire working environment variable.

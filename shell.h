@@ -27,7 +27,7 @@ typedef struct function
 
 extern char **environ;
 
-int simple_shell(void);
+int simple_shell(char **av);
 char **splitter(char fun[]);
 char *execCD(char **argv, char *cwd, char *hd);
 int execEnv(void);
@@ -54,7 +54,7 @@ char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
 char *_strchr(char *s, char c);
 char *_strdup(char *str);
-char *_getenv(char *var);
+char *_getenv(const char *name);
 char **_getPath(void);
 
 #endif
