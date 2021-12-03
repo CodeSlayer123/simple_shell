@@ -49,7 +49,8 @@ return (0);
  * checkArgs - Checks for builtins and other commands in the PATH
  *
  * @argv: The array of arguments passed into shell
- * @st: The stat structure to use when checking for args
+ * @av: name of program
+ * @count: number of arguments that have been passed
  * Return: 0 on success
  */
 int checkArgs(char **argv, char **av, int count)
@@ -57,7 +58,7 @@ int checkArgs(char **argv, char **av, int count)
 	char **path = _getPath();
 	char *execPath = malloc(sizeof(char) * 1024);
 	int i, exitStatus = 0;
-    struct stat st;
+	struct stat st;
 
 	if (_strcmp(argv[0], "env") == 0)
 	{
