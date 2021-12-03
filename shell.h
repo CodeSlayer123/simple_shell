@@ -27,13 +27,13 @@ typedef struct function
 
 extern char **environ;
 
-int simple_shell(void);
+int simple_shell(char **av);
 char **splitter(char fun[]);
 char *execCD(char **argv, char *cwd, char *hd);
 int execEnv(void);
 int execArgs(char **argv);
 int executePath(char *execPath, char **argv);
-int checkArgs(char **argv, struct stat st);
+int checkArgs(char **argv);
 int _strcmp(char *s1, char *s2);
 int _strcmp2(char s1, char *s2);
 int _strlen(char *s);

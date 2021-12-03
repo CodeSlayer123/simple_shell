@@ -51,31 +51,19 @@ int _strcmp2(char s1, char *s2)
  */
 char *_strdup(char *str)
 {
-	char *s;
-	int size = 0;
 	int i;
+	char *ps;
+	int len = 0;
 
 	if (str == NULL)
-	{
 		return (NULL);
-	}
-	while (*str != '\0')
-	{
-		size++;
-		str++;
-	}
-	str = str - size;
-	s = malloc((size + 1) * sizeof(char));
-	if (s == NULL)
-	{
-		free(s);
+	while (str[len] != '\0')
+		len++;
+	len++;
+	ps = malloc(len * sizeof(char));
+	if (ps == NULL)
 		return (NULL);
-	}
-
-	for (i = 0; i < size; i++)
-	{
-		s[i] = str[i];
-	}
-	s[i] = '\0';
-	return (s);
+	for (i = 0; i < len; i++)
+		ps[i] = str[i];
+	return (ps);
 }
