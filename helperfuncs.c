@@ -74,7 +74,7 @@ char *_strcat(char *dest, char *src)
 }
 /**
  * _getenv - gets environmental variables
- * @var: name
+ * @name: name
  * Return: path on success
  */
 char *_getenv(const char *name)

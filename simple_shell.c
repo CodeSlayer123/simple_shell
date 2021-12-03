@@ -117,12 +117,12 @@ int executePath(char *execPath, char **argv)
 	pid = fork();
 	if (pid == -1)
 	{
-		perror("Error:");
+		perror("Forked failed\n");
 		return (-1);
 	}
 	if (pid == 0)
 	{
-		execve(execPath, argv, NULL);
+		execve(execPath, argv, environ);
 	}
 	else
 	{
