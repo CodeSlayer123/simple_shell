@@ -26,7 +26,6 @@ char **_getPath(void)
 	{
 		splitpath[i] = pathtok;
 		pathtok = strtok(NULL, ":");
-
 	}
 	return (splitpath);
 }
