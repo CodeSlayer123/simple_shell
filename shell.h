@@ -54,7 +54,7 @@ char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
 char *_strchr(char *s, char c);
 char *_strdup(char *str);
-char *_getenv(const char *name);
+char *_getenv(const char *str);
 char **_getPath(void);
 
 #endif

@@ -1,6 +1,7 @@
 #include "shell.h"
 /**
  * simple_shell - initializes the shell
+ * @av: The argument
  * Return: 0 on success
  */
 int simple_shell(__attribute__((unused)) char **av)
@@ -16,16 +17,13 @@ int simple_shell(__attribute__((unused)) char **av)
 	do {
 		if (isatty(STDIN_FILENO))
 			_printf("$ ");
-		length = getline(&buffer, &bufsize, stdin);
-		count ++;
+		length = getline(&buffer, &bufsize, stdin), count++;
 		if (length == EOF)
 		{
 			if (isatty(STDIN_FILENO))
 				_printf("\n");
-			free(tmp);
-			exit(0);
+			free(tmp), exit(0);
 		}
-		
 		if (_strcmp(buffer, "\n") == 0)
 			continue;
 		else
@@ -40,11 +38,7 @@ int simple_shell(__attribute__((unused)) char **av)
 			{
 				argv = splitter(buffer);
 				if (_strcmp(argv[0], "exit") == 0)
-				{
-					free(buffer);
-					free(argv);
-					exit(exitStatus);
-				}
+					free(buffer), free(argv), exit(exitStatus);
 				exitStatus = checkArgs(argv, st);
 			}
 		}
