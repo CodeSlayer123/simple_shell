@@ -21,7 +21,7 @@ int simple_shell(char **av)
 		{
 			if (isatty(STDIN_FILENO))
 				_printf("\n");
-			free(tmp), exit(0);
+			free(tmp), exit(exitStatus);
 		}
 		if (_strcmp(buffer, "\n") == 0)
 			continue;

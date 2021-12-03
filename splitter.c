@@ -23,5 +23,6 @@ char **splitter(char fun[])
 		tmp = strtok(NULL, " ");
 		holder[i] = tmp;
 	}
+	free(tmp);
 	return (holder);
 }
