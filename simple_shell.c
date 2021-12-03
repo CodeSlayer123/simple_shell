@@ -118,7 +118,6 @@ int executePath(char *execPath, char **argv)
 	if (pid == -1)
 	{
 		perror("Forked failed\n");
-		return (-1);
 	}
 	if (pid == 0)
 	{
