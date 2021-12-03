@@ -14,10 +14,10 @@ char **_getPath(void)
 	{
 		splitpath[i] = NULL;
 	}
-	path = getenv("PATH");	
+	path = _getenv("PATH");	
 	if (splitpath == NULL)
 	{
-		free(splitpath);
+		free(path), free(splitpath);
 		return (0);
 	}
 	pathtok = strtok(path, ":");
@@ -26,6 +26,7 @@ char **_getPath(void)
 	{
 		splitpath[i] = pathtok;
 		pathtok = strtok(NULL, ":");
+
 	}
 	return (splitpath);
 }
