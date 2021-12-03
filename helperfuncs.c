@@ -14,7 +14,7 @@ char **_getPath(void)
 	{
 		splitpath[i] = NULL;
 	}
-	path = _getenv("PATH");	
+	path = _getenv("PATH");
 	if (splitpath == NULL)
 	{
 		free(path), free(splitpath);
@@ -74,7 +74,7 @@ char *_strcat(char *dest, char *src)
 }
 /**
  * _getenv - gets environmental variables
- * @var: name
+ * @name: name
  * Return: path on success
  */
 char *_getenv(const char *name)
@@ -82,11 +82,13 @@ char *_getenv(const char *name)
 	int i;
 	size_t l = strlen(name);
 
-	if (!__environ || !*name || strchr(name, '=')) return NULL;
-	for (i=0; __environ[i] && (strncmp(name, __environ[i], l)
-		|| __environ[i][l] != '='); i++);
-	if (__environ[i]) return __environ[i] + l+1;
-	return NULL;
+	if (!__environ || !*name || strchr(name, '='))
+		return (NULL);
+	for (i = 0; __environ[i] && (strncmp(name, __environ[i], l)
+	|| __environ[i][l] != '='); i++)
+	if (__environ[i])
+		return (__environ[i] + l + 1);
+	return (NULL);
 }
 
 /**
